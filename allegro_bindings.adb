@@ -12,7 +12,7 @@ package body Allegro_Bindings is
    function Allegro_Create_Display (width : Int; height : Int) return System.Address;
    pragma Import (C, Allegro_Create_Display, "al_create_display");
 
-   function Allegro_Create_Timer (interval : Float) return System.Address;
+   function Allegro_Create_Timer (interval : Double) return System.Address;
    pragma Import (C, Allegro_Create_Timer, "al_create_timer");
 
    function Allegro_Create_Event_Queue return System.Address;
@@ -46,6 +46,20 @@ package body Allegro_Bindings is
    function Allegro_Load_Bitmap (filepath : char_array) return System.Address;
    pragma Import (C, Allegro_Load_Bitmap, "al_load_bitmap");
 
+   function Allegro_Map_RGB (red : Unsigned_char; blue : Unsigned_char;
+                             green : Unsigned_char) return Color;
+   pragma Import (C, Allegro_Map_RGB, "al_map_rgb");
+
+   procedure Allegro_Clear_To_Color (target_color : Color);
+   pragma Import (C, Allegro_Clear_To_Color, "al_clear_to_color");
+
+   procedure Allegro_Flip_Display;
+   pragma Import (C, Allegro_Flip_Display, "al_flip_display");
+
+   procedure Allegro_Draw_Bitmap (target_bitmap : Bitmap; dx : Float;
+                                  dy : Float; flags : Int);
+   pragma Import (C, Allegro_Draw_Bitmap, "al_draw_bitmap");
+
    procedure Init is begin
       if Allegro_Init = 0 then
          raise Init_Error;
@@ -73,7 +87,7 @@ package body Allegro_Bindings is
       return Display (disp);
    end Create_Display;
 
-   function Create_Timer (interval : Float) return Timer is
+   function Create_Timer (interval : Double) return Timer is
       new_timer : System.Address := Allegro_Create_Timer (interval);
    begin
       if new_timer = System.Null_Address then
@@ -133,6 +147,26 @@ package body Allegro_Bindings is
       return Bitmap (new_bitmap);
    end Load_Bitmap;
 
+   function Map_RGB (red : Color_Channel; blue : Color_Channel;
+                     green : Color_Channel) return Color is
+   begin
+      return Allegro_Map_RGB (Unsigned_char (red), Unsigned_char (blue),
+                              Unsigned_char (green));
+   end Map_RGB;
 
+   procedure Clear_To_Color (target_color : Color) is
+   begin
+      Allegro_Clear_To_Color(target_color);
+   end Clear_To_Color;
+
+   procedure Flip_Display is
+   begin
+      Allegro_Flip_Display;
+   end Flip_Display;
+
+   procedure Draw_Bitmap (target_bitmap : Bitmap; dx : Float; dy : Float) is
+   begin
+      Allegro_Draw_Bitmap (target_bitmap, dx, dy, 0);
+   end Draw_Bitmap;
 
 end Allegro_Bindings;

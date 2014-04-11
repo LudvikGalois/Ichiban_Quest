@@ -12,8 +12,10 @@ project Ichiban_Quest is
    end Builder;
 
    package Linker is
-      for Default_Switches ("ada") use ("-Wl,--gc-sections");
+      for Default_Switches ("ada") use ("-Wl,--gc-sections,-lallegro,-lallegro_image");
    end Linker;
+
+   for Languages use ("Ada", "C");
 
 end Ichiban_Quest;
 
