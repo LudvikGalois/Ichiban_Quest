@@ -1,5 +1,6 @@
 with Interfaces.C; use Interfaces.C;
 with System; use System;
+with Allegro_Keycodes; use Allegro_Keycodes;
 
 package Allegro_Bindings is
    Init_Error : Exception;
@@ -17,7 +18,6 @@ package Allegro_Bindings is
    type Bitmap is new System.Address;
    type Joystick is new System.Address;
    type User_Event_Descriptor is new System.Address;
-
 
    procedure Init;
    procedure Init_Image_Addon;
@@ -64,7 +64,7 @@ package Allegro_Bindings is
                disp_orientation : Int;
             when Keyboard_Event =>
                key_current_display : Display;
-               key_keycode : Int;
+               key_keycode : Keycode;
                key_unichar : Int;
                key_modifiers : Unsigned;
                key_repeat : Unsigned_Char;
